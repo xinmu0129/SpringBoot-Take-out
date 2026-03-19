@@ -160,4 +160,15 @@ public class DishServiceImpl implements DishService{
         }
 
     }
+
+    /**
+     * 启用禁用菜品
+     * @param status
+     * @param id
+     */
+    public void startOrStop(Integer status, Long id){
+        Dish dish = dishMapper.getById(id);
+        dish.setStatus(status);
+        dishMapper.update(dish);
+    }
 }
