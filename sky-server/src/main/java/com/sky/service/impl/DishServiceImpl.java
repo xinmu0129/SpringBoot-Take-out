@@ -170,6 +170,8 @@ public class DishServiceImpl implements DishService{
         Dish dish = dishMapper.getById(id);
         dish.setStatus(status);
         dishMapper.update(dish);
+
+        //若是停售操作 则包含此菜品的套餐也需要停售
     }
 
     /**
