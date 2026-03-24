@@ -44,7 +44,7 @@ public interface DishService {
     void updateWithFlavor(DishDTO dishDTO);
 
     /**
-     * 启用禁用菜品
+     * 菜品起售停售
      * @param status
      * @param id
      */
