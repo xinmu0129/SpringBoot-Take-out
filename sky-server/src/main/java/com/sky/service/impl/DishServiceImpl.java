@@ -204,8 +204,11 @@ public class DishServiceImpl implements DishService{
      * @param categoryId
      * @return
      */
-    public List<DishVO> getByCategoryId(String categoryId){
-        List<DishVO> dishVOS = dishMapper.getByCategoryId(categoryId);
-        return dishVOS;
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
     }
 }

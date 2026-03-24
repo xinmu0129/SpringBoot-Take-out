@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
@@ -55,5 +56,5 @@ public interface DishService {
      * @param categoryId
      * @return
      */
-    List<DishVO> getByCategoryId(String categoryId);
+    List<Dish> list(Long categoryId);
 }
