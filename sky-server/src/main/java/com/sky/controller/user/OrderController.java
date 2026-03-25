@@ -89,13 +89,25 @@ public class OrderController {
 
     /**
      * 用户取消订单
-     *
      * @return
      */
     @PutMapping("/cancel/{id}")
     @ApiOperation("取消订单")
     public Result cancel(@PathVariable("id") Long id) throws Exception {
         orderService.userCancelById(id);
+        return Result.success();
+    }
+
+    /**
+     * 用户再来一单
+     * @param id
+     * @return
+     */
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("用户再来一单")
+    public Result reOrder(@PathVariable Long id){
+        log.info("再来一单：{}", id);
+        orderService.repetitionOrder(id);
         return Result.success();
     }
 }
