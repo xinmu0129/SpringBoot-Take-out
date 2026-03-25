@@ -112,15 +112,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         //删除的商品是菜品
         Long dishId = shoppingCart.getDishId();
-        if(dishId != null){
-            //判断number是否为1 ， 若为1 则直接删除 否则number-=1
-            sub(shoppingCart);
-        }else{
-            //删除的菜品是套餐
-            sub(shoppingCart);
-        }
+        sub(shoppingCart);
     }
-
     public void sub(ShoppingCart shoppingCart){
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
         ShoppingCart target = list.get(0);
