@@ -58,4 +58,10 @@ public interface OrderService {
      * @return
      */
     void repetitionOrder(Long id);
+    /**
+     * 条件搜索订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
 }
