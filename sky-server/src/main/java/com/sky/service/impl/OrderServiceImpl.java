@@ -377,7 +377,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 订单取消
+     * 拒单
      * @param ordersRejectionDTO
      * @return
      */
@@ -410,5 +410,29 @@ public class OrderServiceImpl implements OrderService {
         returnOrders.setCancelReason(ordersRejectionDTO.getRejectionReason());
         returnOrders.setCancelTime(LocalDateTime.now());
         orderMapper.update(returnOrders);
+    }
+
+    /**
+     * 订单取消
+     * @param ordersCancelDTO
+     * @return
+     */
+    public void cancel(OrdersCancelDTO ordersCancelDTO){
+        //拿到订单
+        Orders ordersDB = orderMapper.getById(ordersCancelDTO.getId());
+        Integer orderStatus = ordersDB.getStatus();
+        Integer payStatus = ordersDB.getPayStatus();
+        //取消订单时，如果用户完成支付需要退款
+        if(payStatus.equals(Orders.PAID)){
+            ordersDB.setPayStatus(Orders.REFUND);
+        }
+        //取消订单 修改状态
+        ordersDB.setStatus(Orders.CANCELLED);
+        //取消订单需要指定取消原因
+        ordersDB.setCancelReason(ordersCancelDTO.getCancelReason());
+        //修改时间
+        ordersDB.setCancelTime(LocalDateTime.now());
+        orderMapper.update(ordersDB);
+
     }
 }

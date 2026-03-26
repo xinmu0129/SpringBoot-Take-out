@@ -77,9 +77,16 @@ public interface OrderService {
     void confirm(OrdersConfirmDTO ordersConfirmDTO);
 
     /**
-     * 订单取消
+     * 拒单
      * @param ordersRejectionDTO
      * @return
      */
     void rejection(OrdersRejectionDTO ordersRejectionDTO);
+
+    /**
+     * 订单取消
+     * @param ordersCancelDTO
+     * @return
+     */
+    void cancel(OrdersCancelDTO ordersCancelDTO);
 }
