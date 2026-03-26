@@ -6,9 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.xiaoymin.knife4j.core.util.CollectionUtils;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -363,5 +361,54 @@ public class OrderServiceImpl implements OrderService {
         orderStatisticsVO.setConfirmed(confirmed);
         orderStatisticsVO.setDeliveryInProgress(deliveryInProgress);
         return orderStatisticsVO;
+    }
+
+    /**
+     * 确认订单
+     * @param ordersConfirmDTO
+     */
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO){
+        //拿出订单 根据id拿出
+        Orders orders = orderMapper.getById(ordersConfirmDTO.getId());
+        //设置status
+        orders.setStatus(Orders.CONFIRMED);
+        //更新
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 订单取消
+     * @param ordersRejectionDTO
+     * @return
+     */
+    public void rejection(OrdersRejectionDTO ordersRejectionDTO){
+        //查询订单状态
+        Orders orders = orderMapper.getById(ordersRejectionDTO.getId());
+        Integer orderStatus = orders.getStatus();
+        //只有待接单状态可以执行拒单操作
+        if (orders == null || !orderStatus.equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        //订单已完成支付要退款
+        Integer payStatus = orders.getPayStatus();
+        if(payStatus.equals(Orders.PAID)){
+//            //用户已支付，需要退款
+//            String refund = weChatPayUtil.refund(
+//                    orders.getNumber(),
+//                    orders.getNumber(),
+//                    new BigDecimal(0.01),
+//                    new BigDecimal(0.01));
+//            log.info("申请退款：{}", refund);
+            orders.setPayStatus(Orders.REFUND);
+            orderMapper.update(orders);
+        }
+        //待接单状态可以执行拒单操作
+        Orders returnOrders = new Orders();
+        returnOrders.setStatus(Orders.CANCELLED);
+        returnOrders.setId(orders.getId());
+        //拒单的时候要指定拒单原因
+        returnOrders.setCancelReason(ordersRejectionDTO.getRejectionReason());
+        returnOrders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(returnOrders);
     }
 }
