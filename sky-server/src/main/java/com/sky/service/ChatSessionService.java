@@ -10,4 +10,8 @@ public interface ChatSessionService {
      */
     SessionVO createSession(SessionDTO sessionDTO);
 
+    /**
+     * 删除ai聊天会话
+     */
+    void deleteSession(Integer sessionId);
 }

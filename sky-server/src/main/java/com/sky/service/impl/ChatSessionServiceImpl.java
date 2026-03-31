@@ -41,4 +41,11 @@ public class ChatSessionServiceImpl implements ChatSessionService {
 
         return sessionVO;
     }
+
+    /**
+     * 删除ai聊天会话
+     */
+    public void deleteSession(Integer sessionId){
+        chatSessionMapper.deleteById(sessionId);
+    }
 }

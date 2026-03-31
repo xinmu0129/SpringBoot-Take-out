@@ -8,10 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/chat")
@@ -33,5 +30,18 @@ public class ChatSessionController {
         log.info("创建会话：{}", sessionDTO);
         SessionVO sessionVO = chatSessionService.createSession(sessionDTO);
         return Result.success(sessionVO);
+    }
+
+    /**
+     * 删除会话
+     * @param sessionId
+     * @return
+     */
+    @DeleteMapping("/session/{sessionId}")
+    @ApiOperation("删除会话")
+    public Result deleteSession(@PathVariable int sessionId){
+        log.info("删除会话：{}", sessionId);
+        chatSessionService.deleteSession(sessionId);
+        return Result.success();
     }
 }

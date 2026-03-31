@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.entity.ChatSession;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -12,4 +13,7 @@ public interface ChatSessionMapper {
             "values (#{chatTitle}, #{adminId}, #{createTime}, #{updateTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(ChatSession chatSession);
+
+    @Delete("delete from chat_session where id = #{sessionId}")
+    void deleteById(Integer sessionId);
 }
