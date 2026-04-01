@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface ChatMessageMapper {
 
-    @Insert("insert into chat_message (session_id, role, content, create_time , timestamps) values (#{sessionId}, #{role}, #{content}, #{createTime} , #{timestamp})")
+    @Insert("insert into chat_message (session_id, role, content, create_time , timestamps) values (#{sessionId}, #{role}, #{content}, #{createTime} , #{timestamps})")
     @Options(useGeneratedKeys = true , keyProperty = "id" , keyColumn = "id")
 //    @AutoFill(value = OperationType.INSERT)
     void insert(ChatMessage chatMessage);
@@ -19,6 +19,15 @@ public interface ChatMessageMapper {
     @Delete("delete from chat_message where session_id = #{sessionId}")
     void deleteBySessionId(Integer sessionId);
 
+    //获取全部消息
     @Select("select * from chat_message where session_id = #{sessionId} order by create_time ASC")
     List<ChatMessage> getBySessionId(Integer sessionId);
+
+    // 获取最近的消息
+    @Select("SELECT * FROM chat_message " +
+            "WHERE session_id = #{sessionId} " +
+            "ORDER BY create_time DESC " +
+            "LIMIT #{limit}")
+    List<ChatMessage> getRecentMessages(@Param("sessionId") Integer sessionId,
+                                        @Param("limit") int limit);
 }

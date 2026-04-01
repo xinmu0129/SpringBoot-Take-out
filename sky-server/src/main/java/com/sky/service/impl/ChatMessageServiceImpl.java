@@ -8,6 +8,10 @@ import com.sky.service.AdminChatAssistant;
 import com.sky.service.ChatMessageService;
 import com.sky.vo.ChatHistoryVO;
 import com.sky.vo.ChatVO;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public ChatVO send(ChatDTO chatDTO){
         Long sessionId = chatDTO.getSessionId();
         String message = chatDTO.getMessage();
+
         //保存用户发送的信息
         ChatMessage chatMessage = ChatMessage.builder()
                 .sessionId(sessionId)
