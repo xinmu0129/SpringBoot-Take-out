@@ -6,6 +6,7 @@ import com.sky.result.Result;
 import com.sky.service.ChatMessageService;
 import com.sky.service.ChatSessionService;
 import com.sky.vo.ChatHistoryVO;
+import com.sky.vo.ChatListVO;
 import com.sky.vo.ChatVO;
 import com.sky.vo.SessionVO;
 import io.swagger.annotations.Api;
@@ -13,6 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/chat")
@@ -79,5 +82,16 @@ public class ChatController {
         log.info("获取历史记录：{}", sessionId);
         ChatHistoryVO chatHistoryVO = chatMessageService.getHistory(sessionId);
         return Result.success(chatHistoryVO);
+    }
+
+    /**
+     * 获取会话列表
+     * @return
+     */
+    @GetMapping("/session/list")
+    @ApiOperation("获取会话列表")
+    public Result<List<ChatListVO>> list(){
+        List<ChatListVO> chatListVO = chatSessionService.list();
+        return Result.success(chatListVO);
     }
 }

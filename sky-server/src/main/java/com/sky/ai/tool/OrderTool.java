@@ -37,4 +37,6 @@ public class OrderTool {
             default: return "未知状态";
         }
     }
+
+    //TODO 完成更多AI功能
 }

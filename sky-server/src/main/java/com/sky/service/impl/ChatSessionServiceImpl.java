@@ -8,6 +8,7 @@ import com.sky.entity.ChatSession;
 import com.sky.mapper.ChatMessageMapper;
 import com.sky.mapper.ChatSessionMapper;
 import com.sky.service.ChatSessionService;
+import com.sky.vo.ChatListVO;
 import com.sky.vo.ChatVO;
 import com.sky.vo.SessionVO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -59,5 +61,20 @@ public class ChatSessionServiceImpl implements ChatSessionService {
         chatSessionMapper.deleteById(sessionId);
         chatMessageMapper.deleteBySessionId(sessionId);
 
+    }
+
+    /**
+     * 获取会话列表记录
+     */
+    @Transactional
+    public List<ChatListVO> list(){
+        Long adminId = BaseContext.getCurrentId();
+        List<ChatListVO> chatListVOList = chatSessionMapper.getByAdminId(adminId);
+        chatListVOList.forEach(item -> {
+            if (item.getLastMessage() == null) {
+                item.setLastMessage("");
+            }
+        });
+        return chatListVOList;
     }
 }
