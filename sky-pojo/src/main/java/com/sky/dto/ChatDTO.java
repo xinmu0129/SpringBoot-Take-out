@@ -6,5 +6,4 @@ import lombok.Data;
 public class ChatDTO {
     private Long sessionId;
     private String message;
-    private Long timestamp;
 }

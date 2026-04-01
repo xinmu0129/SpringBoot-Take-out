@@ -12,14 +12,14 @@ public interface ChatSessionMapper {
 
     @Insert("insert into chat_session (chat_title, admin_id, create_time, update_time) " +
             "values (#{chatTitle}, #{adminId}, #{createTime}, #{updateTime})")
-    @AutoFill(value = OperationType.INSERT)
+//    @AutoFill(value = OperationType.INSERT)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(ChatSession chatSession);
 
     @Delete("delete from chat_session where id = #{sessionId}")
     void deleteById(Integer sessionId);
 
+    //TODO 契合AutoFill注解
     @Update("update chat_session set update_time = #{updateTime} where id = #{sessionId}")
-    @AutoFill(value = OperationType.UPDATE)
     void updateTimeBySeesionId(Long sessionId , LocalDateTime updateTime);
 }

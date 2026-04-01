@@ -31,4 +31,7 @@ public class ChatMessage implements Serializable {
 
     // 发送时间
     private LocalDateTime createTime;
+
+    //时间戳
+    private Long timestamps;
 }

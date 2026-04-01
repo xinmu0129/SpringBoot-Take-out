@@ -6,12 +6,15 @@ import com.sky.mapper.ChatMessageMapper;
 import com.sky.mapper.ChatSessionMapper;
 import com.sky.service.AdminChatAssistant;
 import com.sky.service.ChatMessageService;
+import com.sky.vo.ChatHistoryVO;
 import com.sky.vo.ChatVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,13 +35,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public ChatVO send(ChatDTO chatDTO){
         Long sessionId = chatDTO.getSessionId();
         String message = chatDTO.getMessage();
-        Long timestamp = chatDTO.getTimestamp();
         //保存用户发送的信息
         ChatMessage chatMessage = ChatMessage.builder()
                 .sessionId(sessionId)
                 .role("user")
                 .content(message)
                 .createTime(LocalDateTime.now())
+                .timestamps(System.currentTimeMillis())
                 .build();
         chatMessageMapper.insert(chatMessage);
 
@@ -55,6 +58,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .role("assistant")
                 .content(aiReplyContent)
                 .createTime(LocalDateTime.now())
+                .timestamps(System.currentTimeMillis())
                 .build();
         chatMessageMapper.insert(aiReplyMessage);
 
@@ -64,14 +68,35 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         //封装返回
 
-        long timestampRes = System.currentTimeMillis();
-
         ChatVO chatVO = ChatVO.builder()
                 .sessionId(sessionId)
                 .messageId(String.valueOf(aiReplyMessage.getId()))
-                .timestamp(timestampRes)
+                .timestamp(System.currentTimeMillis())
                 .botReply(aiReplyContent)
                 .build();
         return chatVO;
+    }
+
+    /**
+     * 获取历史记录
+     */
+    public ChatHistoryVO getHistory(Integer sessionId) {
+        // 1. 获取数据库原始实体列表（包含所有字段）
+        List<ChatMessage> messageList = chatMessageMapper.getBySessionId(sessionId);
+
+        // 2. 转换为精简的 VO 列表，只保留文档要求的 3 个字段
+        List<ChatHistoryVO.MessageItemVO> messageListRes = messageList.stream()
+                .map(message -> ChatHistoryVO.MessageItemVO.builder()
+                        .role(message.getRole())
+                        .content(message.getContent())
+                        .timestamps(message.getTimestamps()) // 直接取数据库存好的时间戳
+                        .build())
+                .collect(Collectors.toList());
+
+        // 3. 构造并返回
+        return ChatHistoryVO.builder()
+                .sessionId(Long.valueOf(sessionId))
+                .messages(messageListRes)
+                .build();
     }
 }

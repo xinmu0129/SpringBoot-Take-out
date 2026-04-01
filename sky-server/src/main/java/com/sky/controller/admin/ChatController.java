@@ -5,6 +5,7 @@ import com.sky.dto.SessionDTO;
 import com.sky.result.Result;
 import com.sky.service.ChatMessageService;
 import com.sky.service.ChatSessionService;
+import com.sky.vo.ChatHistoryVO;
 import com.sky.vo.ChatVO;
 import com.sky.vo.SessionVO;
 import io.swagger.annotations.Api;
@@ -65,5 +66,18 @@ public class ChatController {
         }
         ChatVO chatVO = chatMessageService.send(chatDTO);
         return Result.success(chatVO);
+    }
+
+    /**
+     * 获取历史记录
+     * @param sessionId
+     * @return
+     */
+    @GetMapping("/history/{sessionId}")
+    @ApiOperation("获取历史记录")
+    public Result<ChatHistoryVO> getHistory(@PathVariable Integer sessionId){
+        log.info("获取历史记录：{}", sessionId);
+        ChatHistoryVO chatHistoryVO = chatMessageService.getHistory(sessionId);
+        return Result.success(chatHistoryVO);
     }
 }
