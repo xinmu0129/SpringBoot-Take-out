@@ -1,8 +1,11 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.ChatDTO;
 import com.sky.dto.SessionDTO;
 import com.sky.result.Result;
+import com.sky.service.ChatMessageService;
 import com.sky.service.ChatSessionService;
+import com.sky.vo.ChatVO;
 import com.sky.vo.SessionVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/chat")
 @Api(tags = "AI智能助手相关接口")
 @Slf4j
-public class ChatSessionController {
+public class ChatController {
 
     @Autowired
     private ChatSessionService chatSessionService;
+
+    @Autowired
+    private ChatMessageService chatMessageService;
 
     /**
      * 创建会话
@@ -43,5 +49,21 @@ public class ChatSessionController {
         log.info("删除会话：{}", sessionId);
         chatSessionService.deleteSession(sessionId);
         return Result.success();
+    }
+
+    /**
+     * AI助手聊天
+     * @param chatDTO
+     * @return
+     */
+    @PostMapping("/send")
+    @ApiOperation("AI助手聊天")
+    public Result<ChatVO> send(@RequestBody ChatDTO chatDTO){
+        log.info("AI助手聊天：{}", chatDTO);
+        if (chatDTO.getSessionId() == null || chatDTO.getMessage() == null) {
+            return Result.error("会话ID和消息内容不能为空");
+        }
+        ChatVO chatVO = chatMessageService.send(chatDTO);
+        return Result.success(chatVO);
     }
 }

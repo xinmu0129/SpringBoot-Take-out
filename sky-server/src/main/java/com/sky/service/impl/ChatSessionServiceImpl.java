@@ -1,10 +1,13 @@
 package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
+import com.sky.dto.ChatDTO;
 import com.sky.dto.SessionDTO;
+import com.sky.entity.ChatMessage;
 import com.sky.entity.ChatSession;
 import com.sky.mapper.ChatSessionMapper;
 import com.sky.service.ChatSessionService;
+import com.sky.vo.ChatVO;
 import com.sky.vo.SessionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
