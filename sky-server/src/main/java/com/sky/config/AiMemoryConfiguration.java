@@ -25,7 +25,9 @@ public class AiMemoryConfiguration {
             ChatMemory memory = MessageWindowChatMemory.withMaxMessages(10);
 
             memory.add(SystemMessage.from(
-                    "你是苍穹外卖管理端的智能助手。请用专业、简洁的中文回答管理员的问题。如果不知道，请直接回答不知道，不要编造。"
+                       "你是苍穹外卖管理端的智能助手。" +
+                            "当用户询问订单信息时，请调用系统提供的工具进行查询，而不是自己编造。" +
+                            "例如：根据订单ID查询订单详情。"
             ));
 
             // 2. 查最近10条
