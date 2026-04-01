@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.annocation.AutoFill;
 import com.sky.entity.ChatMessage;
 import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -14,4 +15,7 @@ public interface ChatMessageMapper {
     @Options(useGeneratedKeys = true , keyProperty = "id" , keyColumn = "id")
     @AutoFill(value = OperationType.INSERT)
     void insert(ChatMessage chatMessage);
+
+    @Delete("delete from chat_message where session_id = #{sessionId}")
+    void deleteBySessionId(Integer sessionId);
 }

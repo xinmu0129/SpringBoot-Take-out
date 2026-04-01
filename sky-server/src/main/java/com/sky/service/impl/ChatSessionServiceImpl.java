@@ -5,6 +5,7 @@ import com.sky.dto.ChatDTO;
 import com.sky.dto.SessionDTO;
 import com.sky.entity.ChatMessage;
 import com.sky.entity.ChatSession;
+import com.sky.mapper.ChatMessageMapper;
 import com.sky.mapper.ChatSessionMapper;
 import com.sky.service.ChatSessionService;
 import com.sky.vo.ChatVO;
@@ -12,6 +13,7 @@ import com.sky.vo.SessionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,9 @@ public class ChatSessionServiceImpl implements ChatSessionService {
 
     @Autowired
     private ChatSessionMapper chatSessionMapper;
+
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
 
     /**
      * 创建ai聊天会话
@@ -48,7 +53,11 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     /**
      * 删除ai聊天会话
      */
+    @Transactional
     public void deleteSession(Integer sessionId){
+
         chatSessionMapper.deleteById(sessionId);
+        chatMessageMapper.deleteBySessionId(sessionId);
+
     }
 }
