@@ -24,6 +24,7 @@ package com.sky.config;
 
 import com.sky.ai.tool.OrderTool;
 import com.sky.service.AdminChatAssistant;
+import com.sky.service.DishKnowledgeRagService;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.AiServices;
@@ -36,12 +37,14 @@ public class LangChainConfiguration {
     @Bean
     public AdminChatAssistant adminChatAssistant(ChatLanguageModel chatLanguageModel,
                                                  ChatMemoryProvider chatMemoryProvider,
-                                                 OrderTool orderTool) {
+                                                 OrderTool orderTool,
+                                                 DishKnowledgeRagService dishKnowledgeRagService) {
 
         return AiServices.builder(AdminChatAssistant.class)
                 .chatLanguageModel(chatLanguageModel)
                 .chatMemoryProvider(chatMemoryProvider)
                 .tools(orderTool)
+                .contentRetriever(dishKnowledgeRagService.getContentRetriever())
                 .build();
     }
 }
